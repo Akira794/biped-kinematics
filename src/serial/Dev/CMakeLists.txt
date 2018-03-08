@@ -1,17 +1,20 @@
 cmake_minimum_required(VERSION 2.8)
 
 set( PROJECT_NAME
-		RunKinema
+		Run_SIM
 )
 
 set ( TARGET_MAIN_SRC
-		main.cpp
+		mainsim.cpp
 )
 
 project( ${PROJECT_NAME})
 
 set (INSTALL_TARGET_DIR
     ${CMAKE_SOURCE_DIR}/samples )
+
+set (KINEMA_DIR
+		${CMAKE_SOURCE_DIR}/../kinema )
 
 find_package(Boost COMPONENTS system thread filesystem)
 set(EIGEN3_INCLUDE_DIR $ENV{EIGEN3_INCLUDE_DIR} CACHE PATH "Eigen installation dir(Default: $EIGEN_HOME)")
@@ -29,15 +32,21 @@ link_directories(
 
 add_executable( 
 	${PROJECT_NAME} ${TARGET_MAIN_SRC}
-	kinematics.cpp jacobian.cpp link.cpp 
-	plot.cpp pi.cpp
-	cmd.cpp
-	robot.cpp
+	${KINEMA_DIR}/kinematics.cpp
+	${KINEMA_DIR}/jacobian.cpp
+	${KINEMA_DIR}/link.cpp 
+	${KINEMA_DIR}/plot.cpp
+	${KINEMA_DIR}/pi.cpp
+	${KINEMA_DIR}/cmd.cpp
 
-	kinematics.h jacobian.h link.h demo_biped_link.h 
-	plot.h pi.h
-	cmd.h
-	robot.h
+	${KINEMA_DIR}/kinematics.h
+	${KINEMA_DIR}/jacobian.h
+	${KINEMA_DIR}/link.h
+	${KINEMA_DIR}/demo_biped_link.h 
+	${KINEMA_DIR}/plot.h
+	${KINEMA_DIR}/pi.h
+	${KINEMA_DIR}/cmd.h
+
 )
 
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})

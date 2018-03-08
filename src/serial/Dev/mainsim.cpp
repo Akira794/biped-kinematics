@@ -1,7 +1,7 @@
-#include "link.h"
-#include "kinematics.h"
-#include "plot.h"
-#include "cmd.h"
+#include "../kinema/link.h"
+#include "../kinema/kinematics.h"
+#include "../kinema/plot.h"
+#include "../kinema/cmd.h"
 #include <cstdio>
 #include <cstdlib>
 
