@@ -16,8 +16,7 @@ typedef struct
 	Link ulink[JOINT_NUM], Target_R, Target_L;
 	Vector3d com_pos, rf_pos, lf_pos;
 	FILE *gp;
-	int cmd;
-
+	int cmd, IK_mode;
 }Robot;
 
 void RobotInit( Robot *robot );
@@ -30,5 +29,5 @@ void RobotSetFootPos( Robot *robot);
 void RobotSolveIK( Robot *robot );
 void MoveFootPos( Robot *robot );
 void DrawLeg( Robot *robot );
-
+void Print_Usage();
 #endif

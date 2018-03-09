@@ -81,12 +81,12 @@ void InputKey( int *cmd )
     }
 
 
-		else if(key =='u'){
+		else if(key =='n'){
 			
 			*cmd = 7;
 		}
 
-		else if(key =='j'){
+		else if(key =='l'){
 		
 			*cmd = 8;
 		}

@@ -86,14 +86,13 @@ Vector3d OmegaFromRotation( Matrix3d R )
 	}
 
 }
-
-Vector6d CalcVWerr(Link Cref, Link Cnow)
+Matrix<double,6,1> CalcVWerr(Link Cref, Link Cnow)
 {
-	Vector3d perr = Cref.p - Cnow.p;
-	Matrix3d Rerr = Cnow.R.transpose() * Cref.R;
-	Vector3d werr = Cnow.R * OmegaFromRotation(Rerr);
-	Vector6d err;
-	err << perr, werr;
+  Matrix<double,3,1> perr = Cref.p - Cnow.p;
+	Matrix<double,3,3> Rerr = Cnow.R.transpose() * Cref.R;
+	Matrix<double,3,1> werr = Cnow.R * OmegaFromRotation(Rerr);
+	Matrix<double,6,1> err;
+	err << perr,werr;
 	return err;
 }
 
@@ -101,7 +100,8 @@ bool CalcInverseKinematics( Link* link, int to, Link target)
 {
 	MatrixXd J;
 	VectorXd dq;
-	Vector6d err;
+	Matrix<double,6,1> err;
+
 	const double lambda = 0.5;
 	const int iteration = 100;
 	VectorXi idx = FindRoute( link, to);
@@ -119,13 +119,7 @@ bool CalcInverseKinematics( Link* link, int to, Link target)
 		}
 
 		dq = J.inverse() * err * lambda;
-
-		for(int n = 0; n < jsize; n++)
-		{
-			int j = idx(n);
-			link[j].q = link[j].q + dq(n);
-		}
-
+		MoveJoints(link, idx, dq);
 		CalcForwardKinematics(link, CC);
 
 	}
@@ -134,7 +128,7 @@ bool CalcInverseKinematics( Link* link, int to, Link target)
 
 bool InverseKinematicsAll( Link* link, Link Target_R, Link Target_L )
 {
-	if(!CalcInverseKinematics( link, RLEG_J5, Target_R ) || !CalcInverseKinematics( link, LLEG_J5, Target_L )) 
+	if(!CalcInverseKinematics( link, RLEG_J5, Target_R ) || !CalcInverseKinematics( link, LLEG_J5, Target_L ))
 	{
 		cout << "IK Calculation failure" << endl;
 		return false;
@@ -142,22 +136,72 @@ bool InverseKinematicsAll( Link* link, Link Target_R, Link Target_L )
 
 	return true;
 }
-#if 0
-void CalcIK_LM(Link* link, int to, Link target)
-{
 
+void MoveJoints(Link* link, VectorXi idx, VectorXd dq)
+{
+	for(int n = 0; n < idx.size(); n++)
+	{
+		int j = idx(n);
+		link[j].q = link[j].q + dq(n);
+	}
+}
+
+bool CalcIK_LM(Link* link, int to, Link target)
+{
+	MatrixXd J, Jh;
 	VectorXi idx = FindRoute( link, to);
+	VectorXd dq;
 	double wn_pos = 1/0.3;
 	double wn_ang = 1/(2*pi);
+	double lambda, Ek, Ek2;
+	Matrix< double, 6,1 > we, err, gerr;
+	we << wn_pos, wn_pos, wn_pos, wn_ang, wn_ang, wn_ang;
+	Matrix< double, 6,6 >We = we.array().matrix().asDiagonal();
+	MatrixXd Wn = MatrixXd::Identity(idx.size(),idx.size());
 
-	Matrix<double,6,6> We;
-	We << wn_pos,    0.0,    0.0,    0.0,    0.0,    0.0,
-					 0.0, wn_pos,    0.0,    0.0,    0.0,    0.0,
-					 0.0,	   0.0, wn_pos,    0.0, 	 0.0, 	 0.0,
-					 0.0, 	 0.0,    0.0, wn_ang,    0.0,    0.0,
-					 0.0,    0.0,    0.0,    0.0, wn_ang,    0.0,
-					 0.0,    0.0,    0.0,    0.0,    0.0, wn_ang;
-	
-	Matrix,double,6,6>
+	CalcForwardKinematics( link, CC);
+	err = CalcVWerr( target, link[to]);
+	Ek = err.transpose() * We * err;
+
+	for(int i = 0; i < 10; i++)
+	{
+
+		J = CalcJacobian( link, idx );
+		lambda = Ek + 0.002;
+		Jh   = J.transpose() * We * J + Wn * lambda; //Hk + wn
+		gerr = J.transpose() * We * err; // gk
+		
+		dq = Jh.inverse() * gerr; // new
+		MoveJoints(link, idx, dq);
+
+		Ek2 = gerr.transpose() * We * gerr;
+
+		if(Ek2 < 1E-12)
+		{
+			return true;
+			break;
+		}
+		else if( Ek2 < Ek )
+		{
+			Ek = Ek2;
+		}
+		else
+		{
+			MoveJoints(link, idx, -dq);
+			return true;
+			break;
+		}
+	}
+	return false;
 }
-#endif
+
+bool InverseKinematics_LM_All( Link* link, Link Target_R, Link Target_L )
+{
+	if(!CalcIK_LM( link, RLEG_J5, Target_R ) || !CalcIK_LM( link, LLEG_J5, Target_L ))
+	{
+		cout << "IK Calculation failure" << endl;
+   	return false;
+	}
+	return true;
+}
+

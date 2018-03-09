@@ -65,7 +65,7 @@ void _OutputAngle(Link *link )
 	{
 		cout << "angle[" << i << "] = " << Rad2Deg(link[i].q) << endl;
 	}
-
+	cout << endl << endl << endl << endl << endl << endl << endl << endl << endl;
 }
 
 void LinkDefaultInit( Link* link )

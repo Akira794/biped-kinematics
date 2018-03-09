@@ -1,5 +1,6 @@
 #include "robot.h"
 
+#if 1
 int main()
 {
 	Robot robot;
@@ -26,3 +27,4 @@ int main()
 
 	return 0;
 }
+#endif
