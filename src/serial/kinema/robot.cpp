@@ -7,6 +7,7 @@ void RobotInit( Robot *robot )
 	robot->rf_pos  = Vector3d::Zero();
 	robot->lf_pos  = Vector3d::Zero();
 	robot->cmd = 0;
+	robot->IK_mode = 0;
 	system( "stty -echo ");
 }
 
@@ -74,7 +75,14 @@ void RobotSetFootPos( Robot *robot )
 
 void RobotSolveIK( Robot *robot )
 {
-	InverseKinematicsAll( robot->ulink, robot->Target_R, robot->Target_L);
+	if( (robot->IK_mode) ==0 )
+	{
+		InverseKinematicsAll( robot->ulink, robot->Target_R, robot->Target_L);
+	}
+	else if( (robot->IK_mode) ==1 )
+	{
+		InverseKinematics_LM_All( robot->ulink, robot->Target_R, robot->Target_L);
+	}
 }
 
 void _NowPos( Robot *robot )
@@ -82,6 +90,7 @@ void _NowPos( Robot *robot )
 	cout << "    [" << robot->ulink[RLEG_J5].p[0] <<
 	"," << robot->ulink[RLEG_J5].p[1] <<
 	"," <<  robot->ulink[RLEG_J5].p[2] << "]" << endl;
+//	cout << endl << endl << endl << endl;
 }
 
 void DrawLeg( Robot *robot )
@@ -93,6 +102,7 @@ void MoveFootPos( Robot *robot )
 {
 	if(kbhit())
 	{
+		Print_Usage();
 		InputKey( &robot->cmd );
 		if( (robot->cmd) == 1){
 			(robot->rf_pos[1]) += 0.005;
@@ -130,6 +140,18 @@ void MoveFootPos( Robot *robot )
 			_OutputAngle( robot->ulink );
 		}
 
+		else if( (robot->cmd) ==7){
+			cout << "change NR_IK" << endl;
+			_OutputAngle( robot->ulink );
+			robot->IK_mode = 0;
+		}
+
+		else if( (robot->cmd) ==8){
+			cout << "change LM_IK" << endl;
+			_OutputAngle( robot->ulink );
+			robot->IK_mode =1;
+		}
+
     else if( (robot->cmd) ==10){
 			RobotInit( robot );
 			RobotLoad( robot );
@@ -140,4 +162,16 @@ void MoveFootPos( Robot *robot )
 			cout << " " << endl;
 		}
 	}
+}
+
+void Print_Usage()
+{
+	cout << "=====keymap======" << endl;
+	cout << "(X): 'e' or 'd'  " << endl;
+	cout << "(Y): 's' or 'd'	" << endl;
+	cout << "(Z): 'i' or 'k'	" << endl;
+	cout << "NR : 'n'(default)" << endl;
+	cout << "LM : 'l'					"	<< endl;
+	cout << "reset: 'x'				" << endl;
+	cout << "=================" << endl;
 }

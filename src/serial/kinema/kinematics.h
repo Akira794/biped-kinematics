@@ -12,12 +12,11 @@ void CalcForwardKinematics( Link*, int);
 
 VectorXi FindRoute( Link*, int);
 Vector3d OmegaFromRotation( Matrix3d );
-Vector6d CalcVWerr(Link, Link );
+Matrix<double,6,1> CalcVWerr(Link, Link );
+void MoveJoints(Link* link, VectorXi idx, VectorXd dq);
 bool CalcInverseKinematics( Link*, int, Link );
+bool CalcIK_LM(Link*, int, Link );
 bool InverseKinematicsAll( Link*, Link, Link );
-
-#if 0
-void CalcIK_LM(Link*, int, Link );
-#endif
+bool InverseKinematics_LM_All( Link*, Link, Link );
 
 #endif
