@@ -27,7 +27,7 @@ double _elm( Link* link, int root, int elem )
 void PlotLeg( FILE *gp, Link* link, double c_x, double c_y, double c_z, double theta )
 
 {
-	int TOTAL = JOINT_NUM + 6;
+	int TOTAL = JOINT_NUM + 5;
 	double x[TOTAL], y[TOTAL], z[TOTAL];
 	double S = sin( theta );
 	double C = cos( theta );
@@ -65,25 +65,25 @@ void PlotLeg( FILE *gp, Link* link, double c_x, double c_y, double c_z, double t
 
 	for( i = LFS; i<= LFG; i++ )
 	{
-		x[i+3] = _elm(link,i,0) + c_x;
-		y[i+3] = _elm(link,i,1) + c_y;
-		z[i+3] = _elm(link,i,2);
+		x[i+2] = _elm(link,i,0) + c_x;
+		y[i+2] = _elm(link,i,1) + c_y;
+		z[i+2] = _elm(link,i,2);
 	}
 
-	x[LFG+4] = _elm(link,LFG,0) + 0.05;
-	y[LFG+4] = _elm(link,LFG,1) + c_y;
-	z[LFG+4] = _elm(link,LFG,2);
+	x[LFG+3] = _elm(link,LFG,0) + 0.05;
+	y[LFG+3] = _elm(link,LFG,1) + c_y;
+	z[LFG+3] = _elm(link,LFG,2);
 
 
 /* ==CC=== */
 
-	x[LFG+5] = _elm(link,BCC,0) + c_x;
-	y[LFG+5] = _elm(link,BCC,1) + c_y;
-	z[LFG+5] = _elm(link,BCC,2);
+	x[LFG+4] = _elm(link,BCC,0) + c_x;
+	y[LFG+4] = _elm(link,BCC,1) + c_y;
+	z[LFG+4] = _elm(link,BCC,2);
 
-	x[LFG+6] = _elm(link,BCC,0) + c_x;
-  y[LFG+6] = _elm(link,BCC,1) + c_y;
-  z[LFG+6] = _elm(link,BCC,2) + 0.02;
+	x[LFG+5] = _elm(link,BCC,0) + c_x;
+  y[LFG+5] = _elm(link,BCC,1) + c_y;
+  z[LFG+5] = _elm(link,BCC,2) + 0.02;
 
 	fprintf(gp, "splot '-' with lines linetype 1 linewidth 5 title \"RLEG\",\
 					'-' with lines linetype 3 linewidth 5 title \"LLEG\",\
@@ -96,14 +96,14 @@ void PlotLeg( FILE *gp, Link* link, double c_x, double c_y, double c_z, double t
 
 	fprintf(gp, "e\n");
 
-	for( i = LFS+2; i <= LFG+4; i++ )
+	for( i = LFS+1; i <= LFG+3; i++ )
 	{
 		fprintf( gp, "%f\t%f\t%f\n", x[i],y[i],z[i]);
 	}
 
 	fprintf(gp, "e\n");
 
-	for( i = LFG + 5; i < TOTAL; i++)
+	for( i = LFG + 4; i < TOTAL; i++)
 	{
 		fprintf( gp, "%f\t%f\t%f\n", x[i],y[i],z[i]);
 	}
