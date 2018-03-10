@@ -7,7 +7,7 @@ void RobotInit( Robot *robot )
 	robot->rf_pos  = Vector3d::Zero();
 	robot->lf_pos  = Vector3d::Zero();
 	robot->cmd = 0;
-	robot->IK_mode = 0;
+	if( (robot->IK_mode) != 1) robot->IK_mode = 0;
 	system( "stty -echo ");
 }
 
@@ -32,11 +32,11 @@ void RobotLoad( Robot *robot )
 
 	robot->rf_pos[0] = 0.0;
 	robot->rf_pos[1] = 0.0;
-	robot->rf_pos[2] = -0.25;
+	robot->rf_pos[2] = - 0.25;
 
 	robot->lf_pos[0] = 0.0;
 	robot->lf_pos[1] = 0.0;
-	robot->lf_pos[2] = -0.25;
+	robot->lf_pos[2] = - 0.25;
 }
 
 void RobotPlotDestroy( Robot *robot )
@@ -90,12 +90,31 @@ void _NowPos( Robot *robot )
 	cout << "    [" << robot->ulink[RLEG_J5].p[0] <<
 	"," << robot->ulink[RLEG_J5].p[1] <<
 	"," <<  robot->ulink[RLEG_J5].p[2] << "]" << endl;
-//	cout << endl << endl << endl << endl;
+
 }
 
 void DrawLeg( Robot *robot )
 {
 	PlotLeg( robot->gp, robot->ulink, 0.0, 0.0, 0.0, -0.2 );
+}
+
+void _Now_IK_mode( Robot *robot )
+{
+	if( (robot->IK_mode) == 0)
+	{
+		cout << endl << "IK_mode: NR      " << endl;
+	}
+	else if( (robot->IK_mode ) == 1)
+	{
+		cout << endl << "IK_mode: LM      " << endl;
+	}
+}
+
+void _NowState( Robot *robot )
+{
+	_NowPos( robot );
+	_Now_IK_mode( robot );
+	_OutputAngle( robot->ulink );
 }
 
 void MoveFootPos( Robot *robot )
@@ -106,55 +125,50 @@ void MoveFootPos( Robot *robot )
 		InputKey( &robot->cmd );
 		if( (robot->cmd) == 1){
 			(robot->rf_pos[1]) += 0.005;
-			_NowPos( robot );
-			_OutputAngle( robot->ulink );
+			_NowState( robot );
 		}
 	
 		else if( (robot->cmd) ==2){
 			(robot->rf_pos[1]) -= 0.005;
-			_NowPos( robot );
-			_OutputAngle( robot->ulink );
+			_NowState( robot );
 		}
 		
 		else if( (robot->cmd) ==3){
 			(robot->rf_pos[0]) -= 0.005;
-			_NowPos( robot );
-			_OutputAngle( robot->ulink );
+			_NowState( robot );
 		}
 	
 		else if( (robot->cmd) ==4){
 			(robot->rf_pos[0]) += 0.005;
-			_NowPos( robot );
-			_OutputAngle( robot->ulink );
+			_NowState( robot );
 		}
 	
 		else if( (robot->cmd) ==5){
 	    (robot->rf_pos[2]) += 0.005;
-			_NowPos( robot );
-			_OutputAngle( robot->ulink );
+			_NowState( robot );
 		}
 	
 		else if( (robot->cmd) ==6){
 	    (robot->rf_pos[2]) -= 0.005;
-			_NowPos( robot );
-			_OutputAngle( robot->ulink );
+			_NowState( robot );
 		}
 
 		else if( (robot->cmd) ==7){
 			cout << "change NR_IK" << endl;
-			_OutputAngle( robot->ulink );
 			robot->IK_mode = 0;
+			_NowState( robot );
 		}
 
 		else if( (robot->cmd) ==8){
 			cout << "change LM_IK" << endl;
-			_OutputAngle( robot->ulink );
-			robot->IK_mode =1;
+			robot->IK_mode = 1;
+			_NowState( robot );
 		}
 
     else if( (robot->cmd) ==10){
 			RobotInit( robot );
 			RobotLoad( robot );
+			_Now_IK_mode( robot );
 			_OutputAngle( robot->ulink );
 		}
 

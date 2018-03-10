@@ -171,7 +171,7 @@ bool CalcIK_LM(Link* link, int to, Link target)
 		Jh   = J.transpose() * We * J + Wn * lambda; //Hk + wn
 		gerr = J.transpose() * We * err; // gk
 		
-		dq = Jh.inverse() * gerr; // new
+		dq = Jh.inverse() * gerr; // new qk
 		MoveJoints(link, idx, dq);
 
 		Ek2 = gerr.transpose() * We * gerr;
