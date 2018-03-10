@@ -7,7 +7,7 @@ int main()
 	RobotInit( &robot );
 	RobotPlotInit( &robot, 54, 47, 1 );
 	RobotLoad( &robot );
-
+	Print_Usage();
 	while(1)
 	{
 		MoveFootPos( &robot );
