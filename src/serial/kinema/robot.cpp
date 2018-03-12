@@ -9,6 +9,9 @@ void RobotInit( Robot *robot )
 	robot->cmd = 0;
 	if( (robot->IK_mode) != 1) robot->IK_mode = 0;
 	system( "stty -echo ");
+
+	robot->fp = fopen( "angledata.csv", "w" );
+	robot->sec_clock = 0.0;
 }
 
 void RobotPlotInit( Robot *robot, int roll, int yaw, int mode)
@@ -39,6 +42,13 @@ void RobotLoad( Robot *robot )
 	robot->lf_pos[2] = - 0.25;
 }
 
+void RobotPoseInit( Robot *robot )
+{
+	RobotLoad( robot );
+	RobotSetFootPos( robot );
+	RobotSolveIK( robot );
+}
+
 void RobotPlotDestroy( Robot *robot )
 {
 	pclose(robot->gp);
@@ -48,6 +58,9 @@ void RobotDestroy( Robot *robot )
 {
 	LinkDestroy( robot->ulink );
 	system( "stty echo" );
+
+	fclose( robot->fp );
+
 }
 
 void _SetFootConf( Link* Target, Vector3d pos, int side )
@@ -62,7 +75,7 @@ void _SetFootConf( Link* Target, Vector3d pos, int side )
 	{
 		double ly = pos[1] + 0.044;
 
-		SetFootConf( Target, pos[0], ly,  -0.25,  0.0, 0.0, 0.0);
+		SetFootConf( Target, pos[0], ly,  pos[2],  0.0, 0.0, 0.0);
 	}
 }
 
@@ -75,6 +88,8 @@ void RobotSetFootPos( Robot *robot )
 
 void RobotSolveIK( Robot *robot )
 {
+	clock_t start_clock, end_clock;
+	start_clock = clock();
 	if( (robot->IK_mode) ==0 )
 	{
 		InverseKinematicsAll( robot->ulink, robot->Target_R, robot->Target_L);
@@ -83,6 +98,9 @@ void RobotSolveIK( Robot *robot )
 	{
 		InverseKinematics_LM_All( robot->ulink, robot->Target_R, robot->Target_L);
 	}
+
+	end_clock =clock();
+	robot->sec_clock = (end_clock - start_clock)/(double)CLOCKS_PER_SEC;
 }
 
 void _NowPos( Robot *robot )
@@ -110,11 +128,26 @@ void _Now_IK_mode( Robot *robot )
 	}
 }
 
+void _Now_CostTime( Robot *robot )
+{
+	cout << "cost:" << (robot->sec_clock)*1000 << "msec" << endl;
+}
+
 void _NowState( Robot *robot )
 {
 	_NowPos( robot );
 	_Now_IK_mode( robot );
+	_Now_CostTime( robot );
 	_OutputAngle( robot->ulink );
+}
+
+void _Output( Robot *robot )
+{
+	fprintf( robot->fp, "%lf,%lf,%lf,%lf\n",robot->ulink[RLEG_J5].p[0], 
+	Rad2Deg(robot->ulink[RLEG_J2].q),
+	Rad2Deg(robot->ulink[RLEG_J3].q),
+	Rad2Deg(robot->ulink[RLEG_J4].q)
+	);
 }
 
 void MoveFootPos( Robot *robot )
@@ -136,11 +169,15 @@ void MoveFootPos( Robot *robot )
 		else if( (robot->cmd) ==3){
 			(robot->rf_pos[0]) -= 0.005;
 			_NowState( robot );
+
+			_Output( robot );
 		}
 	
 		else if( (robot->cmd) ==4){
 			(robot->rf_pos[0]) += 0.005;
 			_NowState( robot );
+
+			_Output( robot );
 		}
 	
 		else if( (robot->cmd) ==5){
@@ -167,9 +204,11 @@ void MoveFootPos( Robot *robot )
 
     else if( (robot->cmd) ==10){
 			RobotInit( robot );
-			RobotLoad( robot );
+			RobotPoseInit( robot );
 			_Now_IK_mode( robot );
 			_OutputAngle( robot->ulink );
+			
+			_Output( robot );
 		}
 
 		else{

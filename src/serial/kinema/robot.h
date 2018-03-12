@@ -7,6 +7,7 @@
 #include "cmd.h"
 #include <cstdio>
 #include <cstdlib>
+#include <time.h>
 
 using namespace std;
 using namespace Eigen;
@@ -17,11 +18,16 @@ typedef struct
 	Vector3d com_pos, rf_pos, lf_pos;
 	FILE *gp;
 	int cmd, IK_mode;
+
+	FILE *fp;
+	double sec_clock;
+
 }Robot;
 
 void RobotInit( Robot *robot );
 void RobotPlotInit(Robot *robot, int, int, int );
 void RobotLoad( Robot *robot );
+void RobotPoseInit( Robot *robot );
 void RobotPlotDestroy( Robot *robot );
 void RobotDestroy( Robot *robot );
 

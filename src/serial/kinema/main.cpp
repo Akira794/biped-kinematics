@@ -6,7 +6,7 @@ int main()
 	Robot robot;
 	RobotInit( &robot );
 	RobotPlotInit( &robot, 54, 47, 1 );
-	RobotLoad( &robot );
+	RobotPoseInit( &robot );
 	Print_Usage();
 	while(1)
 	{
