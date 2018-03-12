@@ -61,9 +61,9 @@ void _SetDefaultAngle(Link* link)
 void _OutputAngle(Link *link )
 {
 	cout << endl;
-	for(int i = 0; i < JOINT_NUM; i++ )
+	for(int i = 1; i < JOINT_NUM; i++ )
 	{
-		cout << "angle[" << i << "] = " << Rad2Deg(link[i].q) << endl;
+		cout << "angle[" << link[i].joint_name << "] = " << Rad2Deg(link[i].q) << endl;
 	}
 	cout << endl << endl << endl << endl << endl << endl << endl << endl << endl;
 }
@@ -81,15 +81,3 @@ void SetFootConf( Link* Target, double x, double y, double z, double roll, doubl
  
 }
 
-double TotalMass( Link* link, int rootlink )
-{
-	double m = 0.0;
-	
-	if(rootlink == -1){
-		m = 0.0;
-	}else{
-		m = link[rootlink].joint_mass + TotalMass( link, link[rootlink].sister ) + TotalMass( link, link[rootlink].child );
-
-		return m;
-	}
-}

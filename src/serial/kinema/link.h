@@ -31,5 +31,5 @@ void LinkDestroy(Link*);
 void LinkDefaultInit(Link*);
 void _OutputAngle(Link *link );
 void SetFootConf(Link* , double, double, double , double , double, double);
-double TotalMass( Link*, int );
+
 #endif
