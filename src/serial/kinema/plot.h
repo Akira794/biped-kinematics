@@ -5,7 +5,6 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 #include <cstdio>
-#include "demo_biped_link.h"
 
 using namespace Eigen;
 
