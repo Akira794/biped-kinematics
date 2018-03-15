@@ -1,12 +1,5 @@
-/*
- * @file		LinkParameter.h
- * @brief		Constant Value of Link for Humanoid Robot
- * @author	Ryu Yamamoto
- * @date		2016/02/26
- */
-
-#ifndef _LINK_PARAMETER_
-#define _LINK_PARAMETER_
+#ifndef __DEMO_MANIPLINK_H__
+#define __DEMO_MANIPLINK_H__
 
 #include <iostream>
 #include <string>
@@ -20,7 +13,6 @@ using namespace Eigen;
 static const double eps = 1e-06;
 static const double pi = boost::math::constants::pi<double>();
 
-//JAXON
 static const string joint_name[] = {
 	"BASE",
 	"ARM0",
