@@ -1,0 +1,68 @@
+#ifndef __DEMO_MANIPLINK_H__
+#define __DEMO_MANIPLINK_H__
+
+#include <iostream>
+#include <string>
+#include <Eigen/Dense>
+#include <limits>
+#include <boost/math/constants/constants.hpp>
+
+using namespace std;
+using namespace Eigen;
+
+static const double eps = 1e-06;
+static const double pi = boost::math::constants::pi<double>();
+
+static const string joint_name[] = {
+	"BASE",
+	"ARM0",
+	"ARM1",
+	"ARM2",
+	"ARM3",
+	"ARM4",
+	"ARM5",
+};
+
+enum
+{
+	BASE=0,
+	ARM0,
+	ARM1,
+	ARM2,
+	ARM3,
+	ARM4,
+	ARM5,
+	JOINT_NUM
+};
+
+static const int parent[JOINT_NUM] = {-1,0,1,2,3,4,5};
+static const int child[JOINT_NUM] = {1,2,3,4,5,6,-1};
+static const int sister[JOINT_NUM] = {-1,-1,-1,-1,-1,-1,-1};
+
+static const double Axis[JOINT_NUM][3] = {
+	//BASE
+	{0,0,0},
+
+	//ARM
+	{0,0,1},
+	{0,1,0},
+	{0,1,0},
+	{0,0,1},
+	{0,1,0},
+	{0,0,1},
+};
+
+static const double Pos[JOINT_NUM][3] = {
+	//BASE
+	{0.0f, 0.0f, 0.0f},	
+	
+	//ARM
+	{0.0f, 0.0f, 0.02f},
+	{0.0f, 0.0f, 0.12f},
+	{0.0f, 0.0f, 0.12f},
+	{0.0f, 0.0f, 0.00f},
+	{0.0f, 0.0f, 0.12f},
+	{0.0f, 0.0f, 0.06f},
+};
+
+#endif

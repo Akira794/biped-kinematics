@@ -1,0 +1,1 @@
+/usr/bin/c++       CMakeFiles/RunKinema.dir/mainsim.cpp.o CMakeFiles/RunKinema.dir/kinematics.cpp.o CMakeFiles/RunKinema.dir/jacobian.cpp.o CMakeFiles/RunKinema.dir/link.cpp.o CMakeFiles/RunKinema.dir/plot.cpp.o CMakeFiles/RunKinema.dir/pi.cpp.o CMakeFiles/RunKinema.dir/cmd.cpp.o  -o RunKinema -rdynamic -lboost_system -lboost_thread -lboost_filesystem -lpthread 
