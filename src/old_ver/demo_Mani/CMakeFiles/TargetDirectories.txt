@@ -1,0 +1,1 @@
+/home/greenwich/biped-kinematics/src/serial/demo_Mani/CMakeFiles/RunKinema.dir
