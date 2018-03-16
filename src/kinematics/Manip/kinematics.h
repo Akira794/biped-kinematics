@@ -15,14 +15,13 @@ public:
 	}
 	void calcForwardKinematics(int);
 	bool calcInverseKinematics(int, Link);
-	void MoveJoints(VectorXi, MatrixXd);
+	void MoveJoints(vector<int>, MatrixXd);
 	bool calcLMInverseKinematics(int, Link );
 	bool InverseKinematicsAll( Link, Link );
 	bool InverseKinematics_LM_All( Link, Link );
 
-	VectorXi FindRoute(int);
+	vector<int> FindRoute(int);
 	Matrix<double,3,3> RotationFromRPY( double, double, double);
-
 	Matrix<double,3,3> Rodrigues(Matrix<double,3,1>, double);
 	Matrix<double,3,1> OmegaFromRotation( Matrix<double,3,3> );
 	Matrix<double,6,1> calcVWerr(Link, Link );

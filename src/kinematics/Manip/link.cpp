@@ -8,12 +8,11 @@ extern "C" void SetJointInfo(struct Link *link)
 		link[i].parent = parent[i];
 		link[i].child = child[i];
 		link[i].sister = sister[i];
-		link[i].joint_mass = joint_mass[i];
 
 		for(int j = 0; j < 3; j++)
 		{
-			link[i].a(j) = Axis[i][j];
-			link[i].b(j) = Pos[i][j]/1000.0;
+			link[i].a(j) = LinkAxis[i][j];
+			link[i].b(j) = LinkPos[i][j];
 		}
 	}
 }

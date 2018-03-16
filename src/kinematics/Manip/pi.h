@@ -1,7 +1,7 @@
 #ifndef __PI_H__
 #define __PI_H__
 
-#include "demo_biped_link.h"
+#include "demoManipLink.h"
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 

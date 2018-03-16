@@ -49,30 +49,16 @@ Matrix<double,3,1> Kinematics::OmegaFromRotation( Matrix<double,3,3> R )
 
 }
 
-VectorXi Kinematics::FindRoute( int rootlink)
+vector<int> Kinematics::FindRoute(int to)
 {
-	int flag = 0;
-	VectorXi idx;
-
-	if(rootlink == LLEG_J5)
+	vector<int> idx;
+	int link_num = to;
+	while( link_num != 0)
 	{
-		flag = RLEG_J5;
-		rootlink = RLEG_J5;
-	}
-	else
-	{
-		flag = 0;
-	}
-
-	idx.resize(rootlink);	
-
-	int link_num = rootlink;
-	while(link_num != 0)
-	{
-		idx(link_num-1) = link_num + flag;
+		idx.push_back(link_num);
 		link_num = ulink[link_num].parent;
 	}
-		
+	reverse(idx.begin(), idx.end());
 	return idx;
 }
 
@@ -86,20 +72,19 @@ Matrix<double,6,1> Kinematics::calcVWerr(Link Cref, Link Cnow)
 	return err;
 }
 
-void Kinematics::calcForwardKinematics( int j)
+void Kinematics::calcForwardKinematics( int rootlink)
 {
-	int i;
-	if(j == -1) return;
-	if(j != 0)
+	if(rootlink == -1) return;
+	if(rootlink != 0)
 	{
-		i = ulink[j].parent;
+		int parent = ulink[rootlink].parent;
 	
-		ulink[j].p = ulink[i].p + ulink[i].R * ulink[j].b;
-		ulink[j].R = ulink[i].R * Rodrigues( ulink[j].a, ulink[j].q );
+		ulink[rootlink].p = ulink[parent].p + ulink[parent].R * ulink[rootlink].b;
+		ulink[rootlink].R = ulink[parent].R * Rodrigues( ulink[rootlink].a, ulink[rootlink].q );
 	}
 
-	calcForwardKinematics(ulink[j].sister);
-	calcForwardKinematics(ulink[j].child);
+	calcForwardKinematics(ulink[rootlink].sister);
+	calcForwardKinematics(ulink[rootlink].child);
 }
 
 bool Kinematics::calcInverseKinematics(int to, Link target)
@@ -109,7 +94,9 @@ bool Kinematics::calcInverseKinematics(int to, Link target)
 
 	const double lambda = 0.5;
 	const int iteration = 100;
-	VectorXi idx = FindRoute(to);
+
+	calcForwardKinematics(BASE);
+	vector<int> idx = FindRoute(to);
 	const int jsize = idx.size();
 	J.resize(6,jsize); dq.resize(jsize,1);
 
@@ -125,37 +112,25 @@ bool Kinematics::calcInverseKinematics(int to, Link target)
 
 		dq = J.inverse() * err * lambda;
 		MoveJoints(idx, dq);
-		calcForwardKinematics(CC);
+		calcForwardKinematics(BASE);
 
 	}
 		return false;
 }
 
-bool Kinematics::InverseKinematicsAll(Link Target_R, Link Target_L )
+void Kinematics::MoveJoints( vector<int> idx, MatrixXd dq )
 {
-	if(!calcInverseKinematics(RLEG_J5, Target_R ) || !calcInverseKinematics(LLEG_J5, Target_L ))
+	for(int n=0; n<idx.size(); n++)
 	{
-		cout << "IK Calculation failure" << endl;
-		return false;
-	}
-
-	return true;
-}
-
-void Kinematics::MoveJoints(VectorXi idx, MatrixXd dq)
-{
-	for(int n = 0; n < idx.size(); n++)
-	{
-		int j = idx(n);
-		ulink[j].q = ulink[j].q + dq(n);
+		int j = idx[n];
+		ulink[j].q += dq(n);
 	}
 }
 
 bool Kinematics::calcLMInverseKinematics(int to, Link target)
 {
-#if 1
 	MatrixXd J, Jh, dq;
-	VectorXi idx = FindRoute(to);
+	vector<int> idx = FindRoute(to);
 	double wn_pos = 1/0.3;
 	double wn_ang = 1/(2*pi);
 	double lambda, Ek, Ek2;
@@ -164,7 +139,7 @@ bool Kinematics::calcLMInverseKinematics(int to, Link target)
 	Matrix< double, 6,6 >We = we.array().matrix().asDiagonal();
 	MatrixXd Wn = MatrixXd::Identity(idx.size(),idx.size());
 
-	calcForwardKinematics(CC);
+	calcForwardKinematics(BASE);
 	err = calcVWerr( target, ulink[to]);
 	Ek = err.transpose() * We * err;
 
@@ -186,10 +161,7 @@ bool Kinematics::calcLMInverseKinematics(int to, Link target)
 			return true;
 			break;
 		}
-		else if( Ek2 < Ek )
-		{
-			Ek = Ek2;
-		}
+		else if( Ek2 < Ek ) Ek = Ek2;
 		else
 		{
 			MoveJoints(idx, -dq);
@@ -198,18 +170,5 @@ bool Kinematics::calcLMInverseKinematics(int to, Link target)
 		}
 	}
 	return false;
-#endif
-}
-
-bool Kinematics::InverseKinematics_LM_All( Link Target_R, Link Target_L )
-{
-#if 0
-	if(!calcLMInverseKinematics( link, RLEG_J5, Target_R ) || !calcLMInverseKinematics( link, LLEG_J5, Target_L ))
-	{
-		cout << "IK Calculation failure" << endl;
-   	return false;
-	}
-	return true;
-#endif
 }
 

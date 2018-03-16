@@ -3,9 +3,10 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <Eigen/Core>
 #include <Eigen/Geometry>
-#include "demo_biped_link.h"
+#include "demoManipLink.h"
 #include "pi.h"
 
 using namespace std;

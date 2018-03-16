@@ -9,6 +9,5 @@
 using namespace std;
 using namespace Eigen;
 
-MatrixXd calcJacobian( Link*, VectorXi);
-
+MatrixXd calcJacobian( Link*, vector<int> idx );
 #endif
