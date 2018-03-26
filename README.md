@@ -1,2 +1,4 @@
 ## Biped Kinematics code ##
-## Levenberg-Marquardt method InverseKinematics ##
+### LM法逆運動学の実装 ###
+### ###
+
