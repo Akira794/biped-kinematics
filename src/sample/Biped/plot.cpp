@@ -4,7 +4,7 @@
 
 void SetPlotConf(FILE *gp, int roll, int yaw )
 {
-	fprintf(gp, "set terminal wxt size 800,800 font \"Arial,8\" title 'demo_biped'\n");
+	fprintf(gp, "set terminal qt size 800,800 font \"Arial,8\" title 'demo_biped'\n");
 	fprintf(gp, "set xrange [-0.4:0.4]\n");
 	fprintf(gp, "set yrange [-0.4:0.4]\n");
 	fprintf(gp, "set zrange [-0.4:0.4]\n");
@@ -85,8 +85,8 @@ void PlotLeg( FILE *gp, Link* link, double c_x, double c_y, double c_z, double t
   y[LFG+5] = _elm(link,BCC,1) + c_y;
   z[LFG+5] = _elm(link,BCC,2) + 0.02;
 
-	fprintf(gp, "splot '-' with lines linetype 1 linewidth 5 title \"RLEG\",\
-					'-' with lines linetype 3 linewidth 5 title \"LLEG\",\
+	fprintf(gp, "splot '-' with lines linetype 7 linewidth 5 title \"RLEG\",\
+					'-' with lines linetype 6 linewidth 5 title \"LLEG\",\
 					'-' with lines linetype 2 linewidth 5 title \"WAIST\",\n");
 
 	for( i = BCC; i <= RFG+1; i++ )

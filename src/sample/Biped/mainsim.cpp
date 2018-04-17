@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
 			}
 			State( ulink, mode, foot );
 		}
-		usleep(20000);
+		usleep(10000);
 
 		Target.p << bx + x, by +y, bz + z;
 		Target.R = kinema.computeMatrixFromAngles( deg2rad(broll + roll), deg2rad(bpitch + pitch), deg2rad(byaw + yaw) );
