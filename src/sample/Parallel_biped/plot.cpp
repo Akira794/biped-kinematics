@@ -53,7 +53,7 @@ void PlotLeg( FILE *gp, Link* link, double c_x, double c_y, double c_z, double t
     z[i] = _elm(link,i,2);
 	}
 	
-	x[RFG+1] = _elm(link,RFG,0) + 0.0;//0.05
+	x[RFG+1] = _elm(link,RFG,0) + 0.05;//0.05
 	y[RFG+1] = _elm(link,RFG,1) + c_y;
 	z[RFG+1] = _elm(link,RFG,2);
 
@@ -70,7 +70,7 @@ void PlotLeg( FILE *gp, Link* link, double c_x, double c_y, double c_z, double t
 		z[i+2] = _elm(link,i,2);
 	}
 
-	x[LFG+3] = _elm(link,LFG,0) + 0.0;//0.05
+	x[LFG+3] = _elm(link,LFG,0) + 0.05;//0.05
 	y[LFG+3] = _elm(link,LFG,1) + c_y;
 	z[LFG+3] = _elm(link,LFG,2);
 

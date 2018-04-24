@@ -159,8 +159,8 @@ bool Kinematics::calcLMInverseKinematics(int to, Link target)
 
 		dq = Jh.inverse() * gerr; // new qk
 		MoveJoints(idx, dq);
-		if(to == RR2) ulink[RP2].q = -ulink[RP1].q;
-		if(to == LR2) ulink[LP2].q = -ulink[LP1].q;
+//		if(to == RR2) ulink[RP2].q = -ulink[RP1].q;
+//		if(to == LR2) ulink[LP2].q = -ulink[LP1].q;
 
 		Ek2 = gerr.transpose() * We * gerr;
 
@@ -172,8 +172,8 @@ bool Kinematics::calcLMInverseKinematics(int to, Link target)
 		else
 		{
 			MoveJoints(idx, -dq);
-			if(to == RR2) ulink[RP2].q = -ulink[RP1].q;
-			if(to == LR2) ulink[LP2].q = -ulink[LP1].q;
+//			if(to == RR2) ulink[RP2].q = -ulink[RP1].q;
+//			if(to == LR2) ulink[LP2].q = -ulink[LP1].q;
 			return true;
 		}
 	}
