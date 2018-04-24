@@ -4,7 +4,7 @@
 
 void SetPlotConf(FILE *gp, int roll, int yaw )
 {
-	fprintf(gp, "set terminal qt size 800,900 font \"Arial,8\" title 'demo_biped'\n");
+	fprintf(gp, "set terminal qt size 800,850 font \"Arial,8\" title 'demo_biped'\n");
 	fprintf(gp, "set xrange [-0.4:0.4]\n");
 	fprintf(gp, "set yrange [-0.4:0.4]\n");
 	fprintf(gp, "set zrange [-0.4:0.4]\n");
@@ -27,16 +27,16 @@ double _elm( Link* link, int root, int elem )
 void PlotLeg( FILE *gp, Link* link, double c_x, double c_y, double c_z, double theta )
 
 {
-	int TOTAL = JOINT_NUM + 5;
+	int TOTAL = LINK_NUM + 5;//5
 	double x[TOTAL], y[TOTAL], z[TOTAL];
 	double S = sin( theta );
 	double C = cos( theta );
 	
-	int BCC = CC;
-	int RFS = RLEG_J0;
-	int LFS = LLEG_J0;
-	int RFG = RLEG_J5;
-	int LFG = LLEG_J5;
+	int BCC = BASE;
+	int RFS = RY;
+	int LFS = LY;
+	int RFG = RF;
+	int LFG = LF;
 
 	int i = 0;
 
@@ -53,7 +53,7 @@ void PlotLeg( FILE *gp, Link* link, double c_x, double c_y, double c_z, double t
     z[i] = _elm(link,i,2);
 	}
 	
-	x[RFG+1] = _elm(link,RFG,0) + 0.05;
+	x[RFG+1] = _elm(link,RFG,0) + 0.0;//0.05
 	y[RFG+1] = _elm(link,RFG,1) + c_y;
 	z[RFG+1] = _elm(link,RFG,2);
 
@@ -70,7 +70,7 @@ void PlotLeg( FILE *gp, Link* link, double c_x, double c_y, double c_z, double t
 		z[i+2] = _elm(link,i,2);
 	}
 
-	x[LFG+3] = _elm(link,LFG,0) + 0.05;
+	x[LFG+3] = _elm(link,LFG,0) + 0.0;//0.05
 	y[LFG+3] = _elm(link,LFG,1) + c_y;
 	z[LFG+3] = _elm(link,LFG,2);
 
@@ -85,8 +85,8 @@ void PlotLeg( FILE *gp, Link* link, double c_x, double c_y, double c_z, double t
   y[LFG+5] = _elm(link,BCC,1) + c_y;
   z[LFG+5] = _elm(link,BCC,2) + 0.02;
 
-	fprintf(gp, "splot '-' with lines linetype 1 linewidth 5 title \"RLEG\",\
-					'-' with lines linetype 3 linewidth 5 title \"LLEG\",\
+	fprintf(gp, "splot '-' with lines linetype 7 linewidth 5 title \"RLEG\",\
+					'-' with lines linetype 6 linewidth 5 title \"LLEG\",\
 					'-' with lines linetype 2 linewidth 5 title \"WAIST\",\n");
 
 	for( i = BCC; i <= RFG+1; i++ )

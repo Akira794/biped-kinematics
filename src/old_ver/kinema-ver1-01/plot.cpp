@@ -4,7 +4,7 @@
 
 void SetPlotConf(FILE *gp, int roll, int yaw )
 {
-	fprintf(gp, "set terminal wxt size 800,800 font \"Arial,8\" title 'demo_biped'\n");
+	fprintf(gp, "set terminal qt size 800,900 font \"Arial,8\" title 'demo_biped'\n");
 	fprintf(gp, "set xrange [-0.4:0.4]\n");
 	fprintf(gp, "set yrange [-0.4:0.4]\n");
 	fprintf(gp, "set zrange [-0.4:0.4]\n");

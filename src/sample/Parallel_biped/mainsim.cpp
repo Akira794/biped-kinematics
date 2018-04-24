@@ -10,33 +10,34 @@ using namespace std;
 
 void SetDefaultAngle(Link* link)
 {
-	link[BASE].q      = deg2rad(0.0);
-	link[RLEG_J0].q = deg2rad(0.0);
-	link[RLEG_J1].q = deg2rad(0.0);
-	link[RLEG_J2].q = deg2rad(-30.0);
-	link[RLEG_J3].q = deg2rad(60.0);
-	link[RLEG_J4].q = deg2rad(-30.0);
-	link[RLEG_J5].q = deg2rad(0.0);
+	link[LR2].q =  deg2rad(0.0);
+	link[LP4].q = -deg2rad(40.0) + deg2rad(0.0);;
+	link[LP3].q =  deg2rad(40.0);
+	link[LP2].q = -deg2rad(-40.0);
+	link[LP1].q =  deg2rad(-40.0);
+	link[LR1].q =  deg2rad(0.0);
+	link[LY ].q =  deg2rad(0.0);
 
-	link[LLEG_J0].q = deg2rad(0.0);
-	link[LLEG_J1].q = deg2rad(0.0);
-  	link[LLEG_J2].q = deg2rad(-30.0);
-	link[LLEG_J3].q = deg2rad(60.0);
-	link[LLEG_J4].q = deg2rad(-30.0);
-	link[LLEG_J5].q = deg2rad(0.0);
+	link[RR2].q =  deg2rad(0.0);
+	link[RP4].q = -deg2rad(40.0) + deg2rad(0.0);;
+	link[RP3].q =  deg2rad(40.0);
+	link[RP2].q = -deg2rad(-40.0);
+	link[RP1].q =  deg2rad(-40.0);
+	link[RR1].q =  deg2rad(0.0);
+	link[RY ].q =  deg2rad(0.0);
 }
 
 void Now_State( Link *link, int mode, int foot )
 {
 	int EDF = 0;
-	if(foot == 1) EDF = RLEG_J5;
-	else if( foot == 2) EDF = LLEG_J5;
+	if(foot == 1) EDF = RF;
+	else if( foot == 2) EDF = LF;
 
 	cout << endl << "IK_mode :";
 	if(	mode == 0) cout << "NR-method" << endl;
 	else if(mode ==1) cout << "LM-method" << endl;
-	cout << endl << link[EDF].joint_name << "pos = [" << link[EDF].p(0) << ", " << link[EDF].p(1) << ", "<< link[EDF].p(2) << "]" << endl;
-	cout << endl << link[EDF].joint_name << "Rot = [" << rad2deg(link[EDF].R(0)) << ", " << rad2deg(link[EDF].R(1)) << ", "<< rad2deg(link[EDF].R(2)) << "]" << endl;
+	cout << endl << EDF << "pos = [" << link[EDF].p(0) << ", " << link[EDF].p(1) << ", "<< link[EDF].p(2) << "]" << endl;
+	cout << endl << EDF << "Rot = [" << rad2deg(link[EDF].R(0)) << ", " << rad2deg(link[EDF].R(1)) << ", "<< rad2deg(link[EDF].R(2)) << "]" << endl;
 }
 
 void print_usage()
@@ -67,11 +68,10 @@ void State( Link *link, int mode, int foot )
 
 int main(int argc, char *argv[])
 {
-	Link ulink[JOINT_NUM];
+	Link ulink[LINK_NUM];
 	Kinematics kinema(ulink);
 	SetJointInfo( ulink );
 	int target_link = 0;
-
 	FILE *gp;
 	int cmd = -2, mode = 0, foot = 1;
 	double x = 0.0, y = 0.0, z = 0.0;
@@ -83,14 +83,18 @@ int main(int argc, char *argv[])
 	double pos_step = 0.005;
 	double rot_step = 0.5;
 
-
 	system( "stty -echo");
 	gp = popen( "gnuplot","w");
 	SetPlotConf( gp, 74, 54 );
 	SetDefaultAngle(ulink);
-	kinema.calcForwardKinematics(BASE);
+	kinema.calcForwardKinematics(BASE);	
+	for(int i =0; i < LINK_NUM; i++)
+	{
+		cout << rad2deg(ulink[i].q) << endl;
+	}
+	PlotLeg( gp, ulink, 0.0, 0.0, -0.0, -0.0 );
 
-	target_link = RLEG_J5;
+	target_link = RR2;
 
 	Link Target = ulink[target_link];
 	bx = Target.p(0);
@@ -127,7 +131,7 @@ int main(int argc, char *argv[])
 				x = rx; y = ry; z = rz;
 				roll = r_tr; pitch = r_tp; yaw = r_ty;
 
-				target_link = RLEG_J5; 
+				target_link = RR2; 
 				by = ulink[target_link].p(1);
 				Target = ulink[target_link];
 			}
@@ -140,7 +144,7 @@ int main(int argc, char *argv[])
 				x = lx; y = ly; z = lz;
 				roll = l_tr; pitch= l_tp;  yaw = l_ty;
 
-				target_link = LLEG_J5;
+				target_link = LR2;
 				by = ulink[target_link].p(1);
 				Target = ulink[target_link];
 			}
@@ -151,8 +155,8 @@ int main(int argc, char *argv[])
 				kinema.calcForwardKinematics(BASE);
 				x = y = z = lx = ly = lz = rx = ry = rz = 0.0;
 				roll = pitch = yaw = l_tr = l_tp = l_ty = r_tr = r_tp = r_ty = 0.0;
-				Target = ulink[RLEG_J5];
-				Target = ulink[LLEG_J5];
+				Target = ulink[RR2];
+				Target = ulink[LR2];
 			}
 			State( ulink, mode, foot );
 		}
@@ -163,9 +167,11 @@ int main(int argc, char *argv[])
 
 		if(mode == 0)kinema.calcInverseKinematics(target_link,Target);
 		else if(mode ==1)kinema.calcLMInverseKinematics(target_link,Target);
+
 		PlotLeg( gp, ulink, 0.0, 0.0, -0.0, -0.0 );
 
 	}
+
 	system( "stty echo");
 	pclose(gp);
 	return 0;

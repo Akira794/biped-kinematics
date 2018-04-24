@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project( kinematics_demo)
 
-set(PROJECT_GNU demo_biped)
+set(PROJECT_GNU biped)
 set(GNU_SRC mainsim.cpp)
 
 set(DCMAKE_BUILD_TYPE Debug)
