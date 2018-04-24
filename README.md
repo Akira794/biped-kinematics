@@ -6,7 +6,7 @@
 #### ・gnuplot ( Version 5.0.5 )
 #### ・cmake version 2.8.12.2
 
-###　セットアップ
+### セットアップ
 #### ・Install
 1.必要なパッケージのインストールを行う.( cmake は略. バージョン2.8.12を入れてください )
 ##### get boost & eigen 
@@ -19,7 +19,7 @@ sudo apt install libboost-all-dev libeigen3-dev
 wget http://sourceforge.net/projects/gnuplot/files/gnuplot/5.0.5/gnuplot-5.0.5.tar.gz
 tar zxvf gnuplot-5.0.5.tar.gz
 ````
-###### ・build & install
+##### ・build & install
 ```
 cd gnuplot-5.0.5
 ./configure --with-readline=gnu
