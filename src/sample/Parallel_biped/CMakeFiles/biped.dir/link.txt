@@ -1,1 +1,0 @@
-/usr/bin/c++       CMakeFiles/biped.dir/mainsim.cpp.o CMakeFiles/biped.dir/Link.cpp.o CMakeFiles/biped.dir/Kinematics.cpp.o CMakeFiles/biped.dir/Jacobian.cpp.o CMakeFiles/biped.dir/plot.cpp.o CMakeFiles/biped.dir/cmd.cpp.o  -o biped -rdynamic -lboost_system -lboost_thread -lboost_filesystem -lboost_timer 
