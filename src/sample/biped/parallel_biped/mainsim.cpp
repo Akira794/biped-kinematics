@@ -4,7 +4,7 @@
 #include "cmd.h"
 #include <cstdio>
 #include <cstdlib>
-#include "../util/func.h"
+#include "../../util/func.h"
 
 using namespace std;
 
