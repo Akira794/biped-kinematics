@@ -46,8 +46,9 @@ gnuplot
 set terminal qt
 
 ````
-#### ・Test Smaple
+#### ・Smaple
 ```
+usr: ~/biped-kinematics$
 cmake .
 make 
 make install
