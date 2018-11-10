@@ -1,5 +1,7 @@
 ## Biped Kinematics code ##
 
+#### シリアルリンクとパラレルリンクの運動学プログラム IKはNR法とLM法を実装
+
 ### 動作環境
 
 #### ・Ubuntu16.04
