@@ -12,11 +12,6 @@ find_package(Boost COMPONENTS system thread filesystem timer)
 add_definitions(-lstdc++ -std=c++11)
 add_definitions(-DEIGEN_DONT_ALIGN)
 
-set(USE_GANKENKUN CACHE BOOL FORCE)
-IF(USE_GANKENKUN)
-	add_definitions(-DGANKENKUN)
-ENDIF(USE_GANKENKUN)
-
 include_directories(
 	${Boost_INCLUDE_DIR}
 	${BOOST_INCLUDE_DIRS}
@@ -27,12 +22,6 @@ set(GGP_SRCS
 	main.cpp MainControl.cpp PreviewControl.cpp FootStepPlanner.cpp GaitPatternGenerator.cpp cmd.cpp PreCalculatedPreviewControl.cpp
 	MainControl.h Jacobian.cpp Link.cpp Jacobian.h Kinematics.h Link.h cmd.h PreCalculatedPreviewControl.h
 )
-
-IF(USE_GANKENKUN)
-	set(GGP_SRCS ${GGP_SRCS} Kinematics_GankenKun.cpp LinkParameter_GankenKun.h)
-ELSE(USE_GANKENKUN)
-	set(GGP_SRCS ${GGP_SRCS} Kinematics.cpp LinkParameter.h)
-ENDIF(USE_GANKENKUN)
 
 add_executable(ggp_test
 	${GGP_SRCS}

@@ -2,7 +2,6 @@
 #define _MAINCONTROL_H_
 
 #include "GaitPatternGenerator.h"
-#include "Kinematics.h"
 #include "PlanCommon.h"
 
 #include <stdio.h>
@@ -10,11 +9,6 @@
 #include <string>
 #include <boost/timer/timer.hpp>
 
-#ifdef GANKENKUN
-const double ready[24] = {2,-15,15,0,-2,0,-2,15,-15,0,2,0,0,0,-16,-5,-40,0,16,5,40,0,0,0};
-#else
-const double ready[24] = {2,-15,15,2,-2,0,-2,15,-15,-2,2,0,0,0,-16,-5,-40,0,16,5,40,0,0,0};
-#endif
 const double dt = 0.01;
 const double gait_cycle = 0.34;
 const double foot_dist_y = 0.08;
@@ -66,11 +60,8 @@ private:
 	Eigen::Vector3d right_foot_position_base, left_foot_position_base;
 	Eigen::Vector3d right_foot_position, left_foot_position;
   double right_foot_att, left_foot_att;
-	Link right_foot, left_foot;
 
-	Link ulink[LINK_NUM];
 	GaitPatternGenerator *gait_generator;
-	Kinematics *kinematics;
 	PreCalculatedPreviewControl *pcpc;
 
 };

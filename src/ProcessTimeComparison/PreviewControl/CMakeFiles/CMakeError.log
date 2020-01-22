@@ -1,0 +1,55 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /home/akira794/Desktop/GitHub/biped-kinematics/src/ProcessTimeComparison/PreviewControl/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_5398e/fast"
+/usr/bin/make -f CMakeFiles/cmTC_5398e.dir/build.make CMakeFiles/cmTC_5398e.dir/build
+make[1]: ディレクトリ '/home/akira794/Desktop/GitHub/biped-kinematics/src/ProcessTimeComparison/PreviewControl/CMakeFiles/CMakeTmp' に入ります
+Building C object CMakeFiles/cmTC_5398e.dir/CheckSymbolExists.c.o
+/usr/bin/cc     -o CMakeFiles/cmTC_5398e.dir/CheckSymbolExists.c.o   -c /home/akira794/Desktop/GitHub/biped-kinematics/src/ProcessTimeComparison/PreviewControl/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_5398e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5398e.dir/link.txt --verbose=1
+/usr/bin/cc       CMakeFiles/cmTC_5398e.dir/CheckSymbolExists.c.o  -o cmTC_5398e -rdynamic 
+CMakeFiles/cmTC_5398e.dir/CheckSymbolExists.c.o: 関数 `main' 内:
+CheckSymbolExists.c:(.text+0x16): `pthread_create' に対する定義されていない参照です
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_5398e.dir/build.make:97: ターゲット 'cmTC_5398e' のレシピで失敗しました
+make[1]: *** [cmTC_5398e] エラー 1
+make[1]: ディレクトリ '/home/akira794/Desktop/GitHub/biped-kinematics/src/ProcessTimeComparison/PreviewControl/CMakeFiles/CMakeTmp' から出ます
+Makefile:126: ターゲット 'cmTC_5398e/fast' のレシピで失敗しました
+make: *** [cmTC_5398e/fast] エラー 2
+
+File /home/akira794/Desktop/GitHub/biped-kinematics/src/ProcessTimeComparison/PreviewControl/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/akira794/Desktop/GitHub/biped-kinematics/src/ProcessTimeComparison/PreviewControl/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_76b0c/fast"
+/usr/bin/make -f CMakeFiles/cmTC_76b0c.dir/build.make CMakeFiles/cmTC_76b0c.dir/build
+make[1]: ディレクトリ '/home/akira794/Desktop/GitHub/biped-kinematics/src/ProcessTimeComparison/PreviewControl/CMakeFiles/CMakeTmp' に入ります
+Building C object CMakeFiles/cmTC_76b0c.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_76b0c.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_76b0c
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_76b0c.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_76b0c.dir/CheckFunctionExists.c.o  -o cmTC_76b0c -rdynamic -lpthreads 
+/usr/bin/ld: -lpthreads が見つかりません
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_76b0c.dir/build.make:97: ターゲット 'cmTC_76b0c' のレシピで失敗しました
+make[1]: *** [cmTC_76b0c] エラー 1
+make[1]: ディレクトリ '/home/akira794/Desktop/GitHub/biped-kinematics/src/ProcessTimeComparison/PreviewControl/CMakeFiles/CMakeTmp' から出ます
+Makefile:126: ターゲット 'cmTC_76b0c/fast' のレシピで失敗しました
+make: *** [cmTC_76b0c/fast] エラー 2
+
+

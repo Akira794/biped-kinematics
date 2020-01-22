@@ -16,21 +16,7 @@ MainControl::MainControl(int argc, char *argv[], const double dt)
 {
   position_list_clear();
 	gait_generator	= new GaitPatternGenerator(0.34, 0.05, 0.01);
-	kinematics		= new Kinematics(ulink);
   pcpc = new PreCalculatedPreviewControl(0.34, 0.05, 0.01);
-
-	SetJointInfo(ulink);
-	for(int i=0;i<JOINT_NUM;i++) kinematics->angle[i] = deg2rad(ready[i]);
-	kinematics->setJointAngle();
-	kinematics->calcForwardKinematics(CC);
-
-//注意 左右逆  controllerでは相対視点から見て左右脚を決定してるため
-	right_foot			          = ulink[LR2];
-	left_foot					        = ulink[RR2];
-/*
-  right_foot_position_base	= left_foot.p;
-	left_foot_position_base		= right_foot.p;
-*/
 
 	gait_generator->setTrajectoryParameter(gait_cycle, foot_height_z, zmp_offset, right_foot_position_base, left_foot_position_base);
   /*
