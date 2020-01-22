@@ -9,7 +9,7 @@ set(EIGEN3_INCLUDE_DIR $ENV{EIGEN3_INCLUDE_DIR} CACHE PATH "Eigen installation d
 find_package(Boost COMPONENTS system filesystem iostreams)
 find_package(Boost COMPONENTS system thread filesystem timer)
 
-add_definitions(-lstdc++ -std=c++11)
+add_definitions(-lstdc++ -std=c++11 -w)
 add_definitions(-DEIGEN_DONT_ALIGN)
 
 include_directories(
